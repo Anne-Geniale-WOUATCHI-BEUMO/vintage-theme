@@ -1,0 +1,330 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="
+    section
+    section--page-width
+    color-{{ section.settings.color_scheme }}
+    spacing-style
+  "
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="instagram-feed" data-section-id="{{ section.id }}">
+    {%- if section.settings.heading != blank -%}
+      <div class="instagram-feed__header">
+        <h2 class="instagram-feed__heading">{{ section.settings.heading }}</h2>
+        {%- if section.settings.instagram_handle != blank -%}
+          <a
+            class="instagram-feed__handle"
+            href="https://instagram.com/{{ section.settings.instagram_handle | remove: '@' }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <span>@{{ section.settings.instagram_handle | remove: '@' }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div
+        class="instagram-feed__grid"
+        style="
+          --ig-columns: {{ section.settings.columns }};
+          --ig-gap: {{ section.settings.gap }}px;
+        "
+      >
+        {%- for block in section.blocks -%}
+          <div class="instagram-feed__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" target="_blank" rel="noopener noreferrer" class="instagram-feed__link" aria-label="{{ block.settings.caption | default: 'View on Instagram' }}">
+            {%- endif -%}
+
+              <div class="instagram-feed__image-wrapper">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'instagram-feed__image',
+                      loading: 'lazy',
+                      widths: '300, 400, 500, 600',
+                      sizes: '(max-width: 749px) 50vw, calc(100vw / var(--ig-columns, 4))'
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'instagram-feed__placeholder' }}
+                {%- endif -%}
+
+                {%- if block.settings.caption != blank -%}
+                  <div class="instagram-feed__overlay">
+                    <p class="instagram-feed__caption">{{ block.settings.caption }}</p>
+                  </div>
+                {%- endif -%}
+              </div>
+
+            {%- if block.settings.link != blank -%}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="instagram-feed__empty">Add image blocks to this section in the theme editor.</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .instagram-feed__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .instagram-feed__heading {
+    margin: 0;
+    font-size: var(--font-h4--size, 24px);
+  }
+
+  .instagram-feed__handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  .instagram-feed__handle:hover {
+    color: rgb(var(--color-foreground-rgb));
+  }
+
+  .instagram-feed__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--ig-columns, 4), 1fr);
+    gap: var(--ig-gap, 8px);
+  }
+
+  .instagram-feed__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .instagram-feed__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .instagram-feed__image-wrapper {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .instagram-feed__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .instagram-feed__item:hover .instagram-feed__image {
+    transform: scale(1.05);
+  }
+
+  .instagram-feed__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: rgb(var(--color-foreground-rgb) / 0.05);
+  }
+
+  .instagram-feed__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 0.45);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 16px;
+  }
+
+  .instagram-feed__item:hover .instagram-feed__overlay {
+    opacity: 1;
+  }
+
+  .instagram-feed__caption {
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .instagram-feed__empty {
+    padding: 48px 24px;
+    text-align: center;
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 749px) {
+    .instagram-feed__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .instagram-feed__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Instagram feed",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Follow us on Instagram"
+    },
+    {
+      "type": "text",
+      "id": "instagram_handle",
+      "label": "Instagram handle",
+      "default": "shopify",
+      "info": "Without the @ symbol"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram feed",
+      "category": "Premium",
+      "settings": {
+        "heading": "Follow us on Instagram",
+        "instagram_handle": "shopify",
+        "columns": 4,
+        "gap": 8,
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      },
+      "blocks": [
+        {
+          "type": "image",
+          "settings": {
+            "caption": "New collection drop"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Behind the scenes"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Customer spotlight"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "caption": "Style inspiration"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

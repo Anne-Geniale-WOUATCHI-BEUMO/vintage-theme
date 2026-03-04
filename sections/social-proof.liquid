@@ -1,0 +1,310 @@
+<script src="{{ 'social-proof.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{%- if section.settings.enabled and section.blocks.size > 0 -%}
+  <social-proof-notifications
+    class="social-proof color-{{ section.settings.color_scheme }}"
+    data-display-duration="{{ section.settings.display_duration }}"
+    data-pause-duration="{{ section.settings.pause_duration }}"
+    data-position="{{ section.settings.position }}"
+    data-section-id="{{ section.id }}"
+  >
+    {%- for block in section.blocks -%}
+      <div
+        class="social-proof__notification"
+        data-index="{{ forloop.index0 }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="social-proof__avatar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="social-proof__body">
+          <p class="social-proof__text">
+            <strong>{{ block.settings.customer_name }}</strong> purchased
+            <strong>{{ block.settings.product_name }}</strong>
+          </p>
+          <p class="social-proof__meta">
+            {%- if block.settings.location != blank -%}
+              {{ block.settings.location }} &middot;
+            {%- endif -%}
+            {{ block.settings.time_ago }}
+          </p>
+        </div>
+        <button class="social-proof__close" aria-label="Close notification" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    {%- endfor -%}
+  </social-proof-notifications>
+{%- endif -%}
+
+{% stylesheet %}
+  social-proof-notifications {
+    position: fixed;
+    z-index: 999;
+    pointer-events: none;
+  }
+
+  social-proof-notifications[data-position="bottom-left"] {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  social-proof-notifications[data-position="bottom-right"] {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .social-proof__notification {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgb(var(--color-background-rgb));
+    color: rgb(var(--color-foreground-rgb));
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.1);
+    min-width: 280px;
+    max-width: 360px;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(16px);
+    visibility: hidden;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  social-proof-notifications[data-position="bottom-right"] .social-proof__notification {
+    left: auto;
+    right: 0;
+  }
+
+  .social-proof__notification.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .social-proof__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgb(var(--color-foreground-rgb) / 0.08);
+    flex-shrink: 0;
+    color: rgb(var(--color-foreground-rgb) / 0.5);
+  }
+
+  .social-proof__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .social-proof__text {
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .social-proof__text strong {
+    font-weight: 600;
+  }
+
+  .social-proof__meta {
+    font-size: 11px;
+    line-height: 1.3;
+    margin: 2px 0 0;
+    opacity: 0.55;
+  }
+
+  .social-proof__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: rgb(var(--color-foreground-rgb) / 0.4);
+    padding: 0;
+    flex-shrink: 0;
+    border-radius: 4px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .social-proof__close:hover {
+    color: rgb(var(--color-foreground-rgb) / 0.8);
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  @media screen and (max-width: 749px) {
+    social-proof-notifications[data-position="bottom-left"],
+    social-proof-notifications[data-position="bottom-right"] {
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+    }
+
+    .social-proof__notification {
+      max-width: none;
+      min-width: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Social proof",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "notification",
+      "name": "Notification",
+      "settings": [
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer name",
+          "default": "Sarah M."
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Product name",
+          "default": "Classic Tote Bag"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "New York, NY"
+        },
+        {
+          "type": "text",
+          "id": "time_ago",
+          "label": "Time ago",
+          "default": "2 minutes ago"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable notifications",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "display_duration",
+      "label": "Display duration",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "pause_duration",
+      "label": "Pause between notifications",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "s",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social proof",
+      "category": "Premium",
+      "settings": {
+        "enabled": true,
+        "display_duration": 5,
+        "pause_duration": 10,
+        "position": "bottom-left"
+      },
+      "blocks": [
+        {
+          "type": "notification",
+          "settings": {
+            "customer_name": "Sarah M.",
+            "product_name": "Classic Tote Bag",
+            "location": "New York, NY",
+            "time_ago": "2 minutes ago"
+          }
+        },
+        {
+          "type": "notification",
+          "settings": {
+            "customer_name": "James K.",
+            "product_name": "Leather Wallet",
+            "location": "Los Angeles, CA",
+            "time_ago": "5 minutes ago"
+          }
+        },
+        {
+          "type": "notification",
+          "settings": {
+            "customer_name": "Emily R.",
+            "product_name": "Silk Scarf",
+            "location": "London, UK",
+            "time_ago": "12 minutes ago"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

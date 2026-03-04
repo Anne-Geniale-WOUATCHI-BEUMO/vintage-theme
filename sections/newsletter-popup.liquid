@@ -1,0 +1,347 @@
+<script
+  src="{{ 'newsletter-popup.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<newsletter-popup
+  class="section spacing-style color-{{ section.settings.color_scheme }}"
+  style="{%- render 'spacing-style', settings: section.settings -%}"
+  data-delay="{{ section.settings.delay }}"
+  data-section-id="{{ section.id }}"
+  data-position="{{ section.settings.position }}"
+>
+  <div class="newsletter-popup__overlay"></div>
+  <div class="newsletter-popup__dialog{% if section.settings.position == 'bottom-right' %} newsletter-popup__dialog--bottom-right{% endif %}">
+    {%- if section.settings.background_image != blank -%}
+      <div class="newsletter-popup__image">
+        {{ section.settings.background_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300,400,600' }}
+      </div>
+    {%- endif -%}
+
+    <div class="newsletter-popup__content">
+      <button class="newsletter-popup__close" ref="closeButton" aria-label="Close popup">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="newsletter-popup__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.body_text != blank -%}
+        <p class="newsletter-popup__body">{{ section.settings.body_text }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.discount_code != blank -%}
+        <div class="newsletter-popup__discount">
+          <span class="newsletter-popup__discount-label">Your code:</span>
+          <strong class="newsletter-popup__discount-code">{{ section.settings.discount_code }}</strong>
+        </div>
+      {%- endif -%}
+
+      {%- form 'customer', class: 'newsletter-popup__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="newsletter-popup__form-row">
+          <input
+            type="email"
+            name="contact[email]"
+            class="newsletter-popup__input"
+            placeholder="Enter your email"
+            required
+            autocomplete="email"
+            aria-label="Email address"
+          >
+          <button type="submit" class="newsletter-popup__submit">
+            {{ section.settings.button_label }}
+          </button>
+        </div>
+        {%- if form.posted_successfully? -%}
+          <p class="newsletter-popup__success">Thank you for subscribing!</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <p class="newsletter-popup__error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</newsletter-popup>
+
+{% stylesheet %}
+  newsletter-popup {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+  }
+
+  newsletter-popup.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .newsletter-popup__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .newsletter-popup__dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  .newsletter-popup__dialog--bottom-right {
+    top: auto;
+    left: auto;
+    bottom: 24px;
+    right: 24px;
+    transform: none;
+    max-width: 400px;
+  }
+
+  .newsletter-popup__image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .newsletter-popup__content {
+    padding: 32px;
+    position: relative;
+  }
+
+  .newsletter-popup__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-foreground);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .newsletter-popup__close:hover {
+    opacity: 1;
+  }
+
+  .newsletter-popup__heading {
+    font-size: var(--font-size--h3, 1.5rem);
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+
+  .newsletter-popup__body {
+    font-size: var(--font-size--body, 1rem);
+    margin: 0 0 16px;
+    opacity: 0.8;
+    line-height: 1.5;
+  }
+
+  .newsletter-popup__discount {
+    background: var(--color-foreground);
+    color: var(--color-background);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  .newsletter-popup__discount-code {
+    font-family: monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .newsletter-popup__form-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .newsletter-popup__input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: transparent;
+    color: var(--color-foreground);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .newsletter-popup__input:focus {
+    border-color: var(--color-foreground);
+  }
+
+  .newsletter-popup__submit {
+    padding: 12px 24px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+  }
+
+  .newsletter-popup__submit:hover {
+    opacity: 0.85;
+  }
+
+  .newsletter-popup__success {
+    color: #16a34a;
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+  }
+
+  .newsletter-popup__error {
+    color: #dc2626;
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .newsletter-popup__dialog--bottom-right {
+      bottom: 0;
+      right: 0;
+      left: 0;
+      max-width: 100%;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .newsletter-popup__form-row {
+      flex-direction: column;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter popup",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [],
+  "settings": [
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Display delay (seconds)",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get 10% Off"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "Sign up for our newsletter and receive a discount on your first order."
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount code",
+      "default": "WELCOME10"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter popup",
+      "category": "Premium"
+    }
+  ]
+}
+{% endschema %}

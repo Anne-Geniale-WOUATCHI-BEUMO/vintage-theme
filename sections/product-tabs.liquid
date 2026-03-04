@@ -1,0 +1,342 @@
+<script src="{{ 'product-tabs.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="
+    section
+    section--page-width
+    color-{{ section.settings.color_scheme }}
+    spacing-style
+  "
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <product-tabs class="product-tabs product-tabs--{{ section.settings.tab_style }}" data-section-id="{{ section.id }}">
+    {%- if section.blocks.size > 0 -%}
+      <div class="product-tabs__nav" role="tablist" aria-label="Product information tabs">
+        {%- for block in section.blocks -%}
+          <button
+            class="product-tabs__tab{% if forloop.first %} product-tabs__tab--active{% endif %}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="tab-panel-{{ block.id }}"
+            id="tab-{{ block.id }}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.icon != 'none' -%}
+              <span class="product-tabs__icon">
+                {%- case block.settings.icon -%}
+                  {%- when 'box' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  {%- when 'truck' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  {%- when 'refresh' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                  {%- when 'info' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                {%- endcase -%}
+              </span>
+            {%- endif -%}
+            <span>{{ block.settings.title }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="product-tabs__panels">
+        {%- for block in section.blocks -%}
+          <div
+            class="product-tabs__panel{% if forloop.first %} product-tabs__panel--active{% endif %}"
+            role="tabpanel"
+            id="tab-panel-{{ block.id }}"
+            aria-labelledby="tab-{{ block.id }}"
+            tabindex="0"
+            {% unless forloop.first %}hidden{% endunless %}
+          >
+            <div class="product-tabs__content rte">
+              {{ block.settings.content }}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="product-tabs__empty">Add tab blocks to this section in the theme editor.</p>
+    {%- endif -%}
+  </product-tabs>
+</div>
+
+{% stylesheet %}
+  .product-tabs {
+    display: block;
+    width: 100%;
+  }
+
+  .product-tabs__nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .product-tabs__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-tabs__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-body--size, 14px);
+    font-family: inherit;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.2s ease;
+  }
+
+  .product-tabs__tab:hover {
+    color: rgb(var(--color-foreground-rgb) / 0.85);
+  }
+
+  .product-tabs__tab--active {
+    color: rgb(var(--color-foreground-rgb));
+    font-weight: 600;
+  }
+
+  /* Underline style (default) */
+  .product-tabs--underline .product-tabs__tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+
+  .product-tabs--underline .product-tabs__tab--active::after {
+    background: rgb(var(--color-foreground-rgb));
+  }
+
+  /* Pill style */
+  .product-tabs--pill .product-tabs__nav {
+    border-bottom: none;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+
+  .product-tabs--pill .product-tabs__tab {
+    border-radius: 999px;
+    padding: 8px 20px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+  }
+
+  .product-tabs--pill .product-tabs__tab--active {
+    background: rgb(var(--color-foreground-rgb));
+    color: rgb(var(--color-background-rgb));
+    border-color: rgb(var(--color-foreground-rgb));
+  }
+
+  .product-tabs--pill .product-tabs__tab::after {
+    display: none;
+  }
+
+  /* Bordered style */
+  .product-tabs--bordered .product-tabs__nav {
+    gap: 0;
+  }
+
+  .product-tabs--bordered .product-tabs__tab {
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    border-bottom: none;
+    margin-bottom: -1px;
+    border-radius: 4px 4px 0 0;
+    padding: 10px 20px;
+  }
+
+  .product-tabs--bordered .product-tabs__tab--active {
+    background: rgb(var(--color-background-rgb));
+    border-bottom: 1px solid rgb(var(--color-background-rgb));
+  }
+
+  .product-tabs--bordered .product-tabs__tab::after {
+    display: none;
+  }
+
+  /* Panels */
+  .product-tabs__panels {
+    position: relative;
+  }
+
+  .product-tabs__panel {
+    padding: 24px 0;
+    animation: tabFadeIn 0.25s ease;
+  }
+
+  .product-tabs__panel[hidden] {
+    display: none;
+  }
+
+  @keyframes tabFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .product-tabs__content {
+    line-height: 1.7;
+  }
+
+  .product-tabs__icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .product-tabs__empty {
+    padding: 24px;
+    text-align: center;
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-tabs__tab {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product tabs",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab title",
+          "default": "Tab"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content",
+          "default": "<p>Add content for this tab here.</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "box", "label": "Box" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "refresh", "label": "Refresh" },
+            { "value": "info", "label": "Info" }
+          ],
+          "default": "none"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "tab_style",
+      "label": "Tab style",
+      "options": [
+        { "value": "underline", "label": "Underline" },
+        { "value": "pill", "label": "Pill" },
+        { "value": "bordered", "label": "Bordered" }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tabs",
+      "category": "Premium",
+      "settings": {
+        "tab_style": "underline",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      },
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Description",
+            "content": "<p>Provide a detailed description of your product here. Include key features, materials, dimensions, and any other information that helps customers make informed purchasing decisions.</p>",
+            "icon": "info"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Shipping Info",
+            "content": "<p>We offer free standard shipping on all orders over $50. Standard delivery takes 5-7 business days. Express shipping is available at checkout for an additional fee.</p>",
+            "icon": "truck"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Returns Policy",
+            "content": "<p>We accept returns within 30 days of purchase. Items must be unused and in original packaging. Contact our support team to initiate a return.</p>",
+            "icon": "refresh"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

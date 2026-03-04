@@ -1,0 +1,176 @@
+<script src="{{ 'back-to-top.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<back-to-top
+  class="back-to-top back-to-top--{{ section.settings.position }} color-{{ section.settings.color_scheme }}"
+  data-show-after="{{ section.settings.show_after }}"
+  data-section-id="{{ section.id }}"
+>
+  <button class="back-to-top__button" aria-label="Back to top" type="button">
+    {%- if section.settings.icon_style == 'arrow' -%}
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    {%- else -%}
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    {%- endif -%}
+  </button>
+</back-to-top>
+
+{% stylesheet %}
+  back-to-top {
+    position: fixed;
+    bottom: 24px;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  back-to-top.back-to-top--right {
+    right: 24px;
+  }
+
+  back-to-top.back-to-top--left {
+    left: 24px;
+  }
+
+  .back-to-top__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    background: rgb(var(--color-background-rgb));
+    color: rgb(var(--color-foreground-rgb));
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .back-to-top__button:hover {
+    background: rgb(var(--color-foreground-rgb));
+    color: rgb(var(--color-background-rgb));
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.15);
+    transform: translateY(-2px);
+  }
+
+  .back-to-top__button:active {
+    transform: translateY(0);
+  }
+
+  .back-to-top__button svg {
+    flex-shrink: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    back-to-top {
+      bottom: 16px;
+    }
+
+    back-to-top.back-to-top--right {
+      right: 16px;
+    }
+
+    back-to-top.back-to-top--left {
+      left: 16px;
+    }
+
+    .back-to-top__button {
+      width: 40px;
+      height: 40px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Back to top",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [],
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Icon style",
+      "options": [
+        { "value": "arrow", "label": "Arrow" },
+        { "value": "chevron", "label": "Chevron" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "range",
+      "id": "show_after",
+      "label": "Show after scrolling",
+      "min": 100,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Back to top",
+      "category": "Premium",
+      "settings": {
+        "icon_style": "arrow",
+        "position": "right",
+        "show_after": 300
+      }
+    }
+  ]
+}
+{% endschema %}

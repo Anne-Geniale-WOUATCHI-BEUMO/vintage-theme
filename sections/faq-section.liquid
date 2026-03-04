@@ -1,0 +1,271 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section spacing-style color-{{ section.settings.color_scheme }}"
+  style="{%- render 'spacing-style', settings: section.settings -%}"
+>
+  <div class="faq-section__container faq-section__container--{{ section.settings.layout }}">
+    <div class="faq-section__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="faq-section__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="faq-section__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="faq-section__list">
+      {%- for block in section.blocks -%}
+        <details class="faq-section__item" {{ block.shopify_attributes }}>
+          <summary class="faq-section__question">
+            <span>{{ block.settings.question }}</span>
+            <svg class="faq-section__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-section__answer">
+            {{ block.settings.answer }}
+          </div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .faq-section__container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .faq-section__container--two-column {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .faq-section__container--single .faq-section__header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .faq-section__heading {
+    font-size: var(--font-size--h2, 2rem);
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+
+  .faq-section__subheading {
+    font-size: var(--font-size--body, 1rem);
+    margin: 0;
+    opacity: 0.7;
+    line-height: 1.5;
+  }
+
+  .faq-section__container--two-column .faq-section__header {
+    position: sticky;
+    top: 24px;
+  }
+
+  .faq-section__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-section__item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .faq-section__item:first-child {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .faq-section__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 0;
+    cursor: pointer;
+    font-size: var(--font-size--body, 1rem);
+    font-weight: 600;
+    line-height: 1.4;
+    list-style: none;
+  }
+
+  .faq-section__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-section__question::marker {
+    content: '';
+  }
+
+  .faq-section__chevron {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-section__item[open] .faq-section__chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-section__answer {
+    padding: 0 0 20px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+
+  .faq-section__answer p {
+    margin: 0 0 12px;
+  }
+
+  .faq-section__answer p:last-child {
+    margin-bottom: 0;
+  }
+
+  .faq-section__answer ul,
+  .faq-section__answer ol {
+    padding-left: 20px;
+    margin: 0 0 12px;
+  }
+
+  .faq-section__answer a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .faq-section__container--two-column {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .faq-section__container--two-column .faq-section__header {
+      position: static;
+      text-align: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>We offer a 30-day money-back guarantee on all purchases. If you're not satisfied with your order, contact our support team for a full refund.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Find answers to common questions about our products and services."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "single",
+          "label": "Single column"
+        },
+        {
+          "value": "two-column",
+          "label": "Two column"
+        }
+      ],
+      "default": "single"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "category": "Premium",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day money-back guarantee on all purchases. If you're not satisfied with your order, contact our support team for a full refund.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard shipping takes 5-7 business days. Express shipping is available at checkout for 2-3 business day delivery.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, we ship to over 50 countries worldwide. International shipping typically takes 10-14 business days depending on your location.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
