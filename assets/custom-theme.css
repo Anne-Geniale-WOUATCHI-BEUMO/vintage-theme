@@ -379,8 +379,8 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
    12. Rich Text / RTE — Drop Cap & Ornamental Styles
    ----------------------------------------------------------------- */
 
-/* Drop cap on the first paragraph's first letter */
-.rte > p:first-of-type::first-letter {
+/* Drop cap — scoped to media-with-content editorial paragraphs only */
+.media-with-content .rte > p:first-of-type::first-letter {
   font-family: var(--vintage-font-heading);
   font-size: 3.8em;
   float: left;
@@ -848,7 +848,7 @@ dialog::backdrop {
 
 @media screen and (max-width: 749px) {
   /* Smaller drop cap on mobile */
-  .rte > p:first-of-type::first-letter {
+  .media-with-content .rte > p:first-of-type::first-letter {
     font-size: 3em;
   }
 
@@ -880,7 +880,7 @@ dialog::backdrop {
 
 @media screen and (min-width: 750px) and (max-width: 1199px) {
   /* Tablet refinements */
-  .rte > p:first-of-type::first-letter {
+  .media-with-content .rte > p:first-of-type::first-letter {
     font-size: 3.4em;
   }
 }

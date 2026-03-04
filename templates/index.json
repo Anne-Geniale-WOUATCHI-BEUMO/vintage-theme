@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "sections": {
     "hero_main": {
       "type": "hero",
@@ -82,7 +82,7 @@
         "gradient_direction": "to bottom",
         "blurred_reflection": false,
         "reflection_opacity": 75,
-        "padding-block-start": 120,
+        "padding-block-start": 100,
         "padding-block-end": 80
       }
     },
@@ -93,68 +93,84 @@
           "type": "text",
           "settings": {
             "text": "<p>Small batch</p>",
+            "width": "fit-content",
             "type_preset": "custom",
             "font": "var(--font-heading--family)",
             "font_size": "var(--font-size--h4)",
             "line_height": "tight",
             "letter_spacing": "normal",
             "case": "none",
-            "wrap": "nowrap",
-            "width": "fit-content"
+            "wrap": "nowrap"
           }
         },
-        "marquee_div_1": { "type": "_divider", "settings": {} },
+        "marquee_div_1": {
+          "type": "_divider",
+          "settings": {}
+        },
         "marquee_text_2": {
           "type": "text",
           "settings": {
             "text": "<p>Handcrafted with care</p>",
+            "width": "fit-content",
             "type_preset": "custom",
             "font": "var(--font-heading--family)",
             "font_size": "var(--font-size--h4)",
             "line_height": "tight",
             "letter_spacing": "normal",
             "case": "none",
-            "wrap": "nowrap",
-            "width": "fit-content"
+            "wrap": "nowrap"
           }
         },
-        "marquee_div_2": { "type": "_divider", "settings": {} },
+        "marquee_div_2": {
+          "type": "_divider",
+          "settings": {}
+        },
         "marquee_text_3": {
           "type": "text",
           "settings": {
             "text": "<p>Rooted in tradition</p>",
+            "width": "fit-content",
             "type_preset": "custom",
             "font": "var(--font-heading--family)",
             "font_size": "var(--font-size--h4)",
             "line_height": "tight",
             "letter_spacing": "normal",
             "case": "none",
-            "wrap": "nowrap",
-            "width": "fit-content"
+            "wrap": "nowrap"
           }
         },
-        "marquee_div_3": { "type": "_divider", "settings": {} },
+        "marquee_div_3": {
+          "type": "_divider",
+          "settings": {}
+        },
         "marquee_text_4": {
           "type": "text",
           "settings": {
             "text": "<p>Honestly made</p>",
+            "width": "fit-content",
             "type_preset": "custom",
             "font": "var(--font-heading--family)",
             "font_size": "var(--font-size--h4)",
             "line_height": "tight",
             "letter_spacing": "normal",
             "case": "none",
-            "wrap": "nowrap",
-            "width": "fit-content"
+            "wrap": "nowrap"
           }
         },
-        "marquee_div_4": { "type": "_divider", "settings": {} }
+        "marquee_div_4": {
+          "type": "_divider",
+          "settings": {}
+        }
       },
       "block_order": [
-        "marquee_text_1", "marquee_div_1",
-        "marquee_text_2", "marquee_div_2",
-        "marquee_text_3", "marquee_div_3",
-        "marquee_text_4", "marquee_div_4"
+        "marquee_text_1",
+        "marquee_div_1",
+        "marquee_text_2",
+        "marquee_div_2",
+        "marquee_text_3",
+        "marquee_div_3",
+        "marquee_text_4",
+        "marquee_div_4"
       ],
       "settings": {
         "movement_direction": "reverse",
@@ -372,15 +388,6 @@
     },
     "craftsmanship_steps_1": {
       "type": "craftsmanship-steps",
-      "settings": {
-        "heading": "How It's Made",
-        "subheading": "From raw material to finished heirloom, every step is guided by the hands of our artisans.",
-        "layout": "horizontal",
-        "line_style": "dotted",
-        "color_scheme": "scheme-2",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      },
       "blocks": {
         "step_1": {
           "type": "step",
@@ -411,23 +418,29 @@
           }
         }
       },
-      "block_order": ["step_1", "step_2", "step_3", "step_4"]
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "settings": {
+        "heading": "How It's Made",
+        "subheading": "From raw material to finished heirloom, every step is guided by the hands of our artisans.",
+        "layout": "horizontal",
+        "line_style": "dotted",
+        "color_scheme": "scheme-2",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
     },
     "media_with_content_artisan": {
       "type": "media-with-content",
-      "settings": {
-        "media_position": "right",
-        "media_width": "medium",
-        "media_height": "60svh",
-        "section_width": "full-width",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      },
       "blocks": {
         "media": {
           "type": "_media-without-appearance",
-          "static": true
+          "static": true,
+          "settings": {}
         },
         "content": {
           "type": "_content-without-appearance",
@@ -446,7 +459,9 @@
             },
             "group": {
               "type": "group",
-              "settings": { "height": "fit" },
+              "settings": {
+                "height": "fit"
+              },
               "blocks": {
                 "heading": {
                   "type": "text",
@@ -464,7 +479,10 @@
                   }
                 }
               },
-              "block_order": ["heading", "body_text"]
+              "block_order": [
+                "heading",
+                "body_text"
+              ]
             },
             "button": {
               "type": "button",
@@ -475,10 +493,22 @@
               }
             }
           },
-          "block_order": ["caption", "group", "button"]
+          "block_order": [
+            "caption",
+            "group",
+            "button"
+          ]
         }
       },
-      "block_order": ["media", "content"]
+      "settings": {
+        "media_position": "right",
+        "media_width": "medium",
+        "media_height": "60svh",
+        "section_width": "full-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     },
     "product_list_seasonal": {
       "type": "product-list",
@@ -676,14 +706,6 @@
     },
     "artisan_testimonials_1": {
       "type": "artisan-testimonials",
-      "settings": {
-        "heading": "From Our Community",
-        "subheading": "Honest words from the people who live with our handmade goods every day.",
-        "layout": "grid",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      },
       "blocks": {
         "testimonial_1": {
           "type": "testimonial",
@@ -713,18 +735,22 @@
           }
         }
       },
-      "block_order": ["testimonial_1", "testimonial_2", "testimonial_3"]
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3"
+      ],
+      "settings": {
+        "heading": "From Our Community",
+        "subheading": "Honest words from the people who live with our handmade goods every day.",
+        "layout": "grid",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
     },
     "faq_section_1": {
       "type": "faq-section",
-      "settings": {
-        "heading": "Common Questions",
-        "subheading": "Everything you need to know about our handmade goods, materials, and process.",
-        "layout": "two-column",
-        "color_scheme": "scheme-2",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      },
       "blocks": {
         "faq_1": {
           "type": "faq_item",
@@ -762,7 +788,21 @@
           }
         }
       },
-      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5"]
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5"
+      ],
+      "settings": {
+        "heading": "Common Questions",
+        "subheading": "Everything you need to know about our handmade goods, materials, and process.",
+        "layout": "two-column",
+        "color_scheme": "scheme-2",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
     },
     "newsletter_popup_1": {
       "type": "newsletter-popup",
